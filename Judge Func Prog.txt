@@ -1,0 +1,391 @@
+01. Consumer Print
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.function.Consumer;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        String[] input = console.readLine().split("\\s+");
+        Consumer<String[]> printString = arr -> Arrays.stream(arr).forEach(System.out::println);
+        printString.accept(input);
+    }
+}
+........................................................................................................
+02. Knights of Honor
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.function.Consumer;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        String[] input = console.readLine().split("\\s+");
+        Consumer<String[]> printString = arr -> Arrays.stream(arr).forEach(e -> System.out.println("Sir " + e));
+        printString.accept(input);
+    }
+}
+..............................................................................................................
+03. Custom Min Function 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        int[] input =  Arrays.stream(console.readLine().split("\\s+"))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+
+        Function<int[],Integer> function = x -> {
+            int smallest = Integer.MAX_VALUE;
+            for (int i = 0; i < x.length; i++) {
+                int temp = x[i];
+                if (temp < smallest){
+                    smallest = temp;
+                }
+            }
+            return  smallest;
+        };
+
+        int result = function.apply(input);
+        System.out.println(result);
+    }
+}
+..........................................................................................................
+04. Find Evens or Odds 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.*;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        int[] input =  Arrays.stream(console.readLine().split("\\s+"))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+
+        String command = console.readLine();
+        List<Integer> result = new ArrayList<>();
+
+        int start = input[0];
+        int end = input[input.length - 1];
+        for (int i = start; i <= end; i++) {
+            result.add(i);
+        }
+
+        Predicate<String> predicate = (x) -> {
+            return x.equals("odd");
+        };
+
+        printNums(predicate,result,command)
+        ;
+    }
+
+    private static void printNums (Predicate<String> predicate , List<Integer> result , String command){
+        if(predicate.test(command)){
+            for (int i = 0; i < result.size(); i++) {
+                if(result.get(i) % 2 != 0){
+                    System.out.printf("%s ",result.get(i).toString());
+                }
+            }
+        }
+        else {
+            for (int i = 0; i < result.size(); i++) {
+                if(result.get(i) % 2 == 0){
+                    System.out.printf("%s ",result.get(i).toString());
+                }
+            }
+        }
+    }
+}
+.........................................................................................................................
+05. Applied Arithmetics
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.function.*;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        int[] input = Arrays.stream(console.readLine().split("\\s+"))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+
+        Function<int[], int[]> addOne = arr -> {
+            int[] resultArr = new int[arr.length];
+            for (int i = 0; i < resultArr.length; i++) {
+                resultArr[i] = arr[i] + 1;
+            }
+            return resultArr;
+        };
+        Function<int[], int[]> multiply = arr -> {
+            int[] resultArr = new int[arr.length];
+            for (int i = 0; i < resultArr.length; i++) {
+                resultArr[i] = arr[i] * 2;
+            }
+            return resultArr;
+        };
+        Function<int[], int[]> subtractOne = arr -> {
+            int[] resultArr = new int[arr.length];
+            for (int i = 0; i < resultArr.length; i++) {
+                resultArr[i] = arr[i] - 1;
+            }
+            return resultArr;
+        };
+        Consumer<int[]> print = e -> Arrays.stream(e).forEach(ele -> System.out.printf("%d ",ele));
+
+        int[] result = new int[input.length];
+        while (true) {
+            String command = console.readLine();
+            if ("end".equals(command)) {
+                print.accept(result);
+                System.out.println();
+                break;
+            }
+            switch (command) {
+                case "add":
+                    result = addOne.apply(input);
+                    break;
+                case "subtract":
+                    result = subtractOne.apply(input);
+                    break;
+                case "multiply":
+                    result = multiply.apply(input);
+                    break;
+            }
+
+            System.arraycopy(result, 0, input, 0, result.length);
+
+        }
+    }
+}
+...........................................................................................................................
+06. Reverse And Exclude
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.*;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        List<Integer> input = stream(console.readLine().split("\\s+"))
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
+
+        Integer devisor = Integer.parseInt(console.readLine());
+
+        Function<List<Integer>,List<Integer>> reverse = arr -> {
+            Collections.reverse(arr);
+            return arr;
+        };
+
+        input = reverse.apply(input);
+        input.removeIf(e -> e % devisor == 0);
+        System.out.println(input.toString().replaceAll("[]\\[,]",""));
+    }
+}
+...........................................................................................................................
+07. Predicate For Names 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.*;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        Integer len = Integer.parseInt(console.readLine());
+        String[] input = console.readLine().split("\\s+");
+
+        Predicate<String> predicate = str -> str.length() <= len;
+        for (String str : input) {
+            if(predicate.test(str)){
+                System.out.println(str);
+            }
+        }
+    }
+}
+..............................................................................................................................
+08. Find The Smallest Element
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.*;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        List<Integer> input = Arrays.stream(console.readLine().split("\\s+"))
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
+
+        Function<List<Integer>,Integer> function = arr -> {
+            int smallest = Integer.MAX_VALUE;
+            int index = 0;
+            for (int i = 0; i < arr.size(); i++) {
+                int temp = arr.get(i);
+                if(temp <= smallest){
+                    smallest = temp;
+                    index = i;
+                }
+            }
+            return index;
+        };
+
+        System.out.println(function.apply(input));
+    }
+}
+..........................................................................................................................
+10. List Of Predicates
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.Collectors;
+
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        Integer range = Integer.parseInt(console.readLine());
+        int[] divisors = Arrays.stream(console.readLine().split("\\s+"))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+
+        BiPredicate<int[],Integer> predicate = (arr,num) -> {
+            boolean isDivisible = true;
+            for (int anArr : arr) {
+                if (num % anArr != 0) {
+                    isDivisible = false;
+                    break;
+                }
+            }
+            return isDivisible;
+        };
+
+        for (int i = 1; i <= range; i++) {
+           if(predicate.test(divisors,i)){
+               System.out.print(i + " ");
+           }
+        }
+    }
+}
+............................................................................................................................
+11. Predicate Party!
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.*;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        List<String> input = Arrays.stream(console.readLine().split("\\s+"))
+                .collect(Collectors.toList());
+
+        BiFunction<List<String>,String[],List<String>> biFunction = (list , arr1) -> {
+            String command = arr1[1];
+            List<String> tempList = new ArrayList<>();
+            if("StartsWith".equals(command)){
+                String startSubstr = arr1[2];
+                for (String str : list) {
+                    if(str.startsWith(startSubstr)){
+                        tempList.add(str);
+                    }
+                }
+            }
+            else if("EndsWith".equals(command)){
+                String endSubstr = arr1[2];
+                for (String str : list) {
+                    if(str.endsWith(endSubstr)){
+                       tempList.add(str);
+                    }
+                }
+            }
+            else{
+                Integer wordLen = Integer.parseInt(arr1[2]);
+                for (String str : list) {
+                    if(str.length() == wordLen){
+                        tempList.add(str);
+                    }
+                }
+            }
+            if(arr1[0].equals("Double")){
+                list.addAll(tempList);
+            }
+            else {
+                list.removeAll(tempList);
+            }
+            return list;
+        };
+
+
+        while (true){
+            String[] commands = console.readLine().split("\\s+");
+            if("Party!".equals(commands[0])){
+                break;
+            }
+            biFunction.apply(input,commands);
+        }
+
+        if(input.size() > 0){
+            System.out.println(input.toString().replaceAll("[]\\]\\[]","") + " are going to the party!");
+        }
+        else {
+            System.out.println("Nobody is going to the party!");
+        }
+    }
+}
+..............................................................................................................................
+
