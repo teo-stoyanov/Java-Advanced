@@ -1,0 +1,230 @@
+01. Rectange Area
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        Double sideOne = scanner.nextDouble();
+        Double sideTwo = scanner.nextDouble();
+
+        Double area = (sideOne * sideTwo);
+
+        System.out.printf("%.2f",area);
+    }
+}
+
+02.Triangle Area
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        Double X1 = scanner.nextDouble();
+        Double Y1 = scanner.nextDouble();
+
+        Double X2 = scanner.nextDouble();
+        Double Y2 = scanner.nextDouble();
+
+        Double X3 = scanner.nextDouble();
+        Double Y3 = scanner.nextDouble();
+
+        Double area = Math.abs((X1*(Y2 - Y3) + X2*(Y3 - Y1) + X3*(Y1 - Y2))) / 2;
+
+
+        System.out.printf("%.0f",area);
+    }
+}
+
+03.Formatting Numbers
+import java.text.DecimalFormat;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        Integer num1 = scanner.nextInt();
+        Double num2 = scanner.nextDouble();
+        Double num3 = scanner.nextDouble();
+
+        String hex = Integer.toHexString(num1);
+        String binary = Integer.toBinaryString(num1);
+
+        System.out.print("|");
+        System.out.print(hex.toUpperCase());
+        for (int i = hex.length(); i < 10; i++) {
+            System.out.print(" ");
+        }
+        System.out.print("|");
+        for (int i = binary.length(); i < 10; i++) {
+            System.out.print("0");
+        }
+        System.out.print(binary);
+        System.out.print("|");
+
+        String num2Print = String.format("%.2f",num2);
+
+        for (int i = num2Print.length(); i < 10; i++) {
+            System.out.print(" ");
+        }
+        System.out.print(num2Print);
+        System.out.print("|");
+
+        String num3Print = String.format("%.3f",num3);
+        System.out.print(num3Print);
+        for (int i = num3Print.length(); i < 10; i++) {
+            System.out.print(" ");
+        }
+        System.out.print("|");
+    }
+}
+
+04.Calculate Expression
+import java.text.DecimalFormat;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        Double a = scanner.nextDouble();
+        Double b = scanner.nextDouble();
+        Double c = scanner.nextDouble();
+
+        Double F1 = Math.pow(((Math.pow(a,2) + Math.pow(b,2)) / (Math.pow(a,2) - Math.pow(b,2))),((a + b +c) / Math.sqrt(c)));
+        Double F2 = Math.pow((Math.pow(a,2) + Math.pow(b,2) - Math.pow(c,3)),(a-b));
+        Double result = Math.abs(((a + b + c) / 3) - ((F1 + F2) / 2));
+        System.out.printf("F1 result: %.2f; F2 result: %.2f; Diff: %.2f",F1,F2,result);
+    }
+}
+
+06. Hit the target
+import java.text.DecimalFormat;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        Integer num = scanner.nextInt();
+
+        for (int i = 1; i <= 20; i++) {
+            for (int j = 1; j <= 20; j++) {
+                if(i + j == num){
+                    System.out.printf("%d + %d = %d\n",i,j,num);
+                }
+            }
+        }
+        for (int i = 1; i <= 20; i++) {
+            for (int j = 1; j <= 20; j++) {
+                if(i - j == num){
+                    System.out.printf("%d - %d = %d\n",i,j,num);
+                }
+            }
+        }
+
+    }
+}
+
+07, Character Multiplayer
+import java.text.DecimalFormat;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        String firstWord = scanner.next();
+        String secondWord = scanner.next();
+
+        Integer sum = 0;
+
+        if (firstWord.length() > secondWord.length()){
+            for (int i = 0; i < secondWord.length(); i++) {
+                sum += (firstWord.charAt(i) * secondWord.charAt(i));
+            }
+            for (int i = secondWord.length(); i < firstWord.length(); i++) {
+               sum += firstWord.charAt(i);
+            }
+        }
+        else  if(firstWord.length() < secondWord.length()){
+            for (int i = 0; i < firstWord.length(); i++) {
+                sum += (firstWord.charAt(i) * secondWord.charAt(i));
+            }
+            for (int i = firstWord.length(); i < secondWord.length(); i++) {
+                sum += secondWord.charAt(i);
+            }
+        }
+        else {
+            for (int i = 0; i < secondWord.length(); i++) {
+                sum += (firstWord.charAt(i) * secondWord.charAt(i));
+            }
+        }
+        System.out.printf("%d",sum);
+    }
+}
+
+08. First Odd or Even Elements
+     import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        int[] input = Arrays.stream(scanner.nextLine().split(" "))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+
+        String[] commands = scanner.nextLine().split(" ");
+        Integer getCount = Integer.parseInt(commands[1]);
+        String command = commands[2];
+
+        Integer odds = 0;
+        List<Integer> oddList = new ArrayList<>();
+        Integer evens = 0;
+        List<Integer> evenList = new ArrayList<>();
+
+        if (command.equals("even")) {
+            for (int i = 0; i < input.length; i++) {
+                if (input[i] % 2 == 0) {
+                    evens++;
+                    evenList.add(input[i]);
+                    if (evens.equals(getCount)) {
+                        break;
+                    }
+                }
+            }
+            for (Integer even : evenList) {
+                System.out.printf("%d ",even);
+            }
+        } else {
+            for (int i = 0; i < input.length; i++) {
+                if (input[i] % 2 != 0) {
+                    odds++;
+                    oddList.add(input[i]);
+                    if (odds.equals(getCount)) {
+                        break;
+                    }
+                }
+            }
+            for (Integer odd : oddList) {
+                System.out.printf("%d " ,odd);
+            }
+        }
+
+    }
+}
+
+

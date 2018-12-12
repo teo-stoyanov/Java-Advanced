@@ -1,0 +1,475 @@
+1.	Count Substring Occurrences 
+import java.util.Scanner;
+
+public class Task01 {
+    public static void main(String[] args) {
+        Scanner console = new Scanner(System.in);
+
+        String text = console.nextLine().toLowerCase();
+        String searchStr = console.nextLine().toLowerCase();
+
+        int count = 0;
+        int i = 0;
+
+        while (text.indexOf(searchStr, i) != -1) {
+            count++;
+            i = text.indexOf(searchStr,i) + 1;
+        }
+
+        System.out.println(count);
+
+    }
+}
+
+2.	Sum Big Numbers
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        String longNum =trimZero(console.readLine());
+        String shortNum = trimZero(console.readLine());
+
+        if(longNum.length() < shortNum.length()){
+            String temp = longNum;
+            longNum = shortNum;
+            shortNum = temp;
+        }
+
+        StringBuilder result = new StringBuilder();
+        int longerNumLen = longNum.length() - 1;
+        int overflow = 0;
+        for (int i = shortNum.length() - 1; i >= 0; i--, longerNumLen-- ) {
+            int firstNum = shortNum.charAt(i) - '0';
+            int secondNum = longNum.charAt(longerNumLen) - '0';
+            int digit = firstNum + secondNum + overflow;
+            overflow = 0;
+            if(digit >= 10){
+                digit = digit % 10;
+                overflow++;
+            }
+            result.append(digit);
+        }
+
+        for (int i = longerNumLen; i >= 0; i--) {
+            int num = longNum.charAt(i) - '0';
+            int digit = num + overflow;
+            overflow = 0;
+            if (digit >= 10){
+                digit = digit % 10;
+                overflow++;
+            }
+            result.append(digit);
+        }
+
+        if(overflow > 0){
+            result.append(1);
+        }
+
+        System.out.println(result.reverse().toString());
+    }
+
+    private static String trimZero(String number){
+        int count = 0;
+        for (int i = 0; i < number.length(); i++) {
+             if(number.charAt(i) != '0'){
+                 break;
+             }
+             count++;
+
+        }
+        return number.substring(count);
+    }
+}
+
+3.	Text Filter
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        String[] bannedWords = console.readLine().split(", ");
+        String text = console.readLine();
+
+        for (String pattern : bannedWords) {
+            StringBuilder replace = new StringBuilder();
+            for (int i = 0; i < pattern.length(); i++) {
+                replace.append("*");
+            }
+            text = text.replace(pattern, replace);
+        }
+
+        System.out.println(text);
+    }
+}
+
+4.	Unicode Characters 
+5.	Palindromes
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Set;
+import java.util.TreeSet;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        String[] text = console.readLine().split("[\\s,.!?]+");
+        Set<String> result = new TreeSet<>();
+
+        for (String str : text) {
+           StringBuilder tempRev = new StringBuilder();
+           tempRev.append(str);
+           String temp = tempRev.reverse().toString();
+           if(temp.equals(str)){
+               result.add(str);
+           }
+        }
+
+        System.out.println(result);
+    }
+}
+
+6.	Magic Exchangeable Words 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedHashMap;
+import java.util.*;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        String[] input = console.readLine().split("\\s+");
+        Map<Character,Character> map = new LinkedHashMap<>();
+
+        String longerWord = input[0];
+        String shorterWord = input[1];
+
+        if(longerWord.length() < shorterWord.length()){
+            String temp = longerWord;
+            longerWord = shorterWord;
+            shorterWord = temp ;
+        }
+
+        boolean isValid = true;
+        int longWordLen = 0;
+        for (int i = 0; i < shorterWord.length(); i++, longWordLen++) {
+            char firstChar = longerWord.charAt(i);
+            char secondChar = shorterWord.charAt(i);
+
+            if(!map.containsKey(firstChar)){
+                if(!map.containsValue(secondChar)){
+                    map.put(firstChar,secondChar);
+                }
+                else {
+                    isValid = false;
+                    break;
+                }
+            }
+            else {
+                if(map.get(firstChar).equals(secondChar)){
+                    continue;
+                }
+                else {
+                    isValid = false;
+                    break;
+                }
+            }
+        }
+
+        for (int i = longWordLen; i < longerWord.length(); i++) {
+            char firstChar = longerWord.charAt(i);
+            if(!map.containsKey(firstChar)){
+                isValid = false;
+                break;
+            }
+        }
+
+        if(isValid){
+            System.out.println("true");
+        }
+        else {
+            System.out.println("false");
+        }
+    }
+}
+
+7.	* Letters Change Numbers 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        String[] input = console.readLine().split("\\s+");
+        double sum = 0;
+        for (String str : input) {
+            double num = Long.parseLong(str.substring(1, str.length() - 1));
+            char frontChar = str.charAt(0);
+            char backChar = str.charAt(str.length() - 1);
+            int frontPosition = findCharPositon(frontChar);
+            int backPosition = findCharPositon(backChar);
+            if(String.valueOf(frontChar).equals(String.valueOf(frontChar).toLowerCase())){
+                sum += num * frontPosition;
+            }
+            else {
+                sum += num / frontPosition;
+            }
+            if (String.valueOf(backChar).equals(String.valueOf(backChar).toLowerCase())){
+                sum += backPosition;
+            }
+            else {
+                sum -= backPosition;
+            }
+        }
+        System.out.printf("%.2f",sum);
+    }
+
+    private static int findCharPositon(char frontChar) {
+        int frontCharPosition;
+        if (String.valueOf(frontChar).equals(String.valueOf(frontChar).toLowerCase())) {
+            frontCharPosition = frontChar - 96;
+        } else {
+            frontCharPosition = frontChar - 64;
+        }
+        return  frontCharPosition;
+    }
+}
+
+9.	Match Full Name 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.regex.Pattern;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        Pattern pattern = Pattern.compile("^(?<firstName>[A-Z][a-z]+) (?<lastName>[A-Z][a-z]+)$");
+        while (true){
+            String input = console.readLine();
+            if("end".equalsIgnoreCase(input)){
+                break;
+            }
+            if (Pattern.matches(String.valueOf(pattern), input)) {
+                System.out.println(input);
+            }
+        }
+    }
+}
+
+ 10.	Match Phone Number
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        Pattern pattern = Pattern.compile("^\\+359( |-)2\\1(\\d{3})\\1(\\d{4})$");
+        while (true){
+            String input = console.readLine();
+            if("end".equalsIgnoreCase(input)){
+                break;
+            }
+            if (Pattern.matches(String.valueOf(pattern), input)) {
+                System.out.println(input);
+            }
+        }
+    }
+}
+
+11.	Replace a Tag
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        StringBuilder sb = new StringBuilder();
+        while (true){
+            String line = console.readLine();
+            if("END".equals(line)){
+                break;
+            }
+            sb.append(line).append(System.lineSeparator());
+        }
+        String result = sb.toString();
+        Pattern pattern = Pattern.compile("(<a)\\s*href.*?(>)\\s*.*?(<\\/a>)");
+       //                                    (<a)\\s*href.*?(>)\\s*.+(<\\/a>)
+        Matcher matcher = pattern.matcher(result);
+
+        while (matcher.find()){
+            String change = matcher.group(0);
+            String entireGroup = matcher.group(0);
+            change = change.replaceFirst(matcher.group(1),"[URL");
+            change = change.replaceFirst(matcher.group(2),"]");
+            change = change.replaceFirst(matcher.group(3),"[/URL]");
+            result = result.replace(entireGroup,change);
+        }
+
+        System.out.println(result);
+    }
+}
+
+12.	Extract Emails 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        String input = console.readLine();
+        Pattern namePattern = Pattern.compile("(^| )[A-Za-z][\\w-\\.]+[A-Za-z]");
+        Pattern hostPattern = Pattern.compile("[A-Za-z]([A-Za-z-.]+)\\.([A-Za-z.]+)[A-Za-z]");
+        Pattern emailPattern = Pattern.compile(namePattern + "@" + hostPattern);
+
+        Matcher matcher = emailPattern.matcher(input);
+        while (matcher.find()){
+            System.out.println(matcher.group(0).trim());
+        }
+    }
+}
+
+13.	Sentence Extractor
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        String word = console.readLine();
+        String text = console.readLine();
+        Pattern pattern = Pattern.compile(".+?[\\.!?]");
+        Matcher matcher = pattern.matcher(text);
+
+        while (matcher.find()){
+            if (matcher.group(0).contains(" " + word + " ")) {
+                System.out.println(matcher.group(0).trim());
+            }
+        }
+    }
+}
+
+14.	*Sum of All Values 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+
+        String keyString = console.readLine();
+        String textString = console.readLine();
+
+        Pattern keysRegex = Pattern.compile("(^[A-Za-z_]+)(?=\\d).*(?<=\\d)([A-Za-z_]+)$");
+        Matcher keysMatch = keysRegex.matcher(keyString);
+        double sum = 0;
+
+        if(!keysMatch.find()){
+            System.out.println("<p>A key is missing</p>");
+        }
+        else {
+            String startKey = keysMatch.group(1);
+            String endKey = keysMatch.group(2);
+
+            Pattern regex = Pattern.compile(startKey + "([\\d.]*)" + endKey);
+            Matcher textMatch = regex.matcher(textString);
+            while (textMatch.find()){
+                double num = Double.parseDouble(textMatch.group(1));
+                sum += num;
+            }
+
+            if(sum == 0){
+                System.out.println("<p>The total value is: <em>nothing</em></p>");
+            }
+            else {
+                if(sum > (int)sum){
+                    System.out.printf("<p>The total value is: <em>%.2f</em></p>",sum);
+                }
+                else {
+                    System.out.printf("<p>The total value is: <em>%d</em></p>",(int)sum);
+                }
+            }
+        }
+    }
+}
+
+15.	*Valid Usernames 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class Task02 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+        String[] input = console.readLine().split("[()/\\\\ ]");
+
+        Pattern userPattern = Pattern.compile("(\\b[A-Za-z][\\w]{2,24}+\\b)");
+        List<String> onlyMatches = new ArrayList<>();
+        for (String user : input) {
+            Matcher matcher = userPattern.matcher(user);
+            if(matcher.find()){
+                onlyMatches.add(user);
+            }
+        }
+
+        int bestSum = 0;
+        String firstWord = "";
+        String secondWord = "";
+
+        for (int i = 0; i < onlyMatches.size() - 1; i ++) {
+            int firstCurrLen = onlyMatches.get(i).length();
+            int secondCurrLen = onlyMatches.get(i+1).length();
+            int sumLen = firstCurrLen + secondCurrLen;
+            if(sumLen > bestSum){
+                bestSum = sumLen;
+                firstWord = onlyMatches.get(i);
+                secondWord = onlyMatches.get(i + 1);
+            }
+        }
+        System.out.println(firstWord);
+        System.out.println(secondWord);
+    }
+}

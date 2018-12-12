@@ -1,0 +1,580 @@
+01. Students by Group 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+        Map<Integer, List<String>> students = new HashMap<>();
+
+        while (true) {
+            String[] input = console.readLine().split("\\s+");
+            if ("END".equals(input[0])) {
+                break;
+            }
+
+            String firstName = input[0];
+            String lastName = input[1];
+            Integer group = Integer.parseInt(input[2]);
+            StringBuilder name = new StringBuilder();
+            name.append(firstName).append(" ").append(lastName);
+
+            if (!students.containsKey(group)) {
+                List<String> temp = new ArrayList<>();
+                temp.add(name.toString());
+                students.put(group, temp);
+            } else {
+                students.get(group).add(name.toString());
+            }
+        }
+
+        students.entrySet().stream()
+                .filter(kv -> 2 == kv.getKey())
+                .forEach(kv -> kv.getValue()
+                        .stream()
+                        .sorted(String::compareTo)
+                        .forEach(System.out::println));
+        
+    }
+}
+
+.............................................................................................................................
+02. Students by First and Last Name 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+        Set<Students> students = new LinkedHashSet<>();
+
+        while (true) {
+            String[] input = console.readLine().split("\\s+");
+            if ("END".equals(input[0])) {
+                break;
+            }
+
+            String firstName = input[0];
+            String lastName = input[1];
+
+            Students temp = new Students(firstName,lastName);
+            students.add(temp);
+        }
+
+        students.stream()
+                .filter(s -> s.getFirstName().compareToIgnoreCase(s.getSecondName()) < 0)
+                .forEach(s -> System.out.println(s.getFirstName() + " " + s.getSecondName()));
+    }
+}
+
+class Students{
+    private String firstName;
+    private String secondName;
+
+    public Students(String firstName, String secondName) {
+        this.firstName = firstName;
+        this.secondName = secondName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getSecondName() {
+        return secondName;
+    }
+
+    @Override
+    public String toString() {
+        return firstName + " " + secondName;
+    }
+}
+
+..........................................................................................................................
+03. Students by Age
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+        Set<Students> students = new LinkedHashSet<>();
+
+        while (true) {
+            String[] input = console.readLine().split("\\s+");
+            if ("END".equals(input[0])) {
+                break;
+            }
+
+            String firstName = input[0];
+            String lastName = input[1];
+            int age = Integer.parseInt(input[2]);
+
+            Students temp = new Students(firstName,lastName,age);
+            students.add(temp);
+        }
+
+        students.stream().filter(s -> s.getAge() >= 18 && s.getAge() <= 24)
+                .forEach(s -> System.out.println(s.toString()));
+    }
+}
+
+class Students{
+    private String firstName;
+    private String secondName;
+    private Integer age;
+
+    public Students(String firstName, String secondName, Integer age) {
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.age = age;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getSecondName() {
+        return secondName;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    @Override
+    public String toString() {
+        return firstName + " " + secondName + " " + age;
+    }
+}
+
+..............................................................................................................................
+04. Sort Students
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+        Set<Students> students = new LinkedHashSet<>();
+
+        while (true) {
+            String[] input = console.readLine().split("\\s+");
+            if ("END".equals(input[0])) {
+                break;
+            }
+
+            String firstName = input[0];
+            String lastName = input[1];
+
+            Students temp = new Students(firstName,lastName);
+            students.add(temp);
+        }
+
+        students.stream()
+                .sorted(Comparator.comparing(Students::getSecondName)
+                        .thenComparing((st1,st2) -> st2.getFirstName().compareTo(st1.getFirstName())))
+                .forEach(s -> System.out.println(s.getFirstName() + " " + s.getSecondName()));
+    }
+}
+
+class Students{
+    private String firstName;
+    private String secondName;
+
+    Students(String firstName, String secondName) {
+        this.firstName = firstName;
+        this.secondName = secondName;
+    }
+
+    String getFirstName() {
+        return firstName;
+    }
+
+    String getSecondName() {
+        return secondName;
+    }
+
+    @Override
+    public String toString() {
+        return firstName + " " + secondName;
+    }
+}
+
+.............................................................................................................................
+05. Filter Students by Email Domain 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+        Map<String, String> nameMails = new LinkedHashMap<>();
+        while (true) {
+            String[] input = console.readLine().split("\\s+");
+            if ("END".equals(input[0])) {
+                break;
+            }
+
+            String firstName = input[0];
+            String lastName = input[1];
+            String mail = input[2];
+            nameMails.put(firstName + " " + lastName,mail);
+        }
+        
+        nameMails.entrySet().stream()
+                .filter(kv -> kv.getValue().contains("@gmail.com"))
+                .forEach(kv -> System.out.println(kv.getKey()));
+
+    }
+}
+
+..............................................................................................................................
+06. Filter Students by Phone 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+        Map<String, String> nameMails = new LinkedHashMap<>();
+        while (true) {
+            String[] input = console.readLine().split("\\s+");
+            if ("END".equals(input[0])) {
+                break;
+            }
+
+            String firstName = input[0];
+            String lastName = input[1];
+            String mail = input[2];
+            nameMails.put(firstName + " " + lastName,mail);
+        }
+
+        nameMails.entrySet().stream()
+                .filter(kv -> kv.getValue().startsWith("02") || kv.getValue().startsWith("+3592"))
+                .forEach(kv -> System.out.println(kv.getKey()));
+
+    }
+}
+
+..............................................................................................................................
+07. Excellent Students 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+        Map<String, List<String>> nameGrades = new LinkedHashMap<>();
+        while (true) {
+            String[] input = console.readLine().split("\\s+");
+            if ("END".equals(input[0])) {
+                break;
+            }
+
+            String firstName = input[0];
+            String lastName = input[1];
+            List<String> grades = new ArrayList<>();
+            for (int i = 2; i < input.length; i++) {
+                String grade = (input[i]);
+                grades.add(grade);
+            }
+
+            nameGrades.put(firstName + " " + lastName,grades);
+        }
+        nameGrades.entrySet().stream()
+                .filter(kv -> kv.getValue().contains("6"))
+                .forEach(kv -> System.out.println(kv.getKey()));
+    }
+}
+
+..............................................................................................................................
+08. WeakStudents 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+        Map<String, List<String>> nameGrades = new LinkedHashMap<>();
+        while (true) {
+            String[] input = console.readLine().split("\\s+");
+            if ("END".equals(input[0])) {
+                break;
+            }
+
+            String firstName = input[0];
+            String lastName = input[1];
+            List<String> grades = new ArrayList<>();
+            for (int i = 2; i < input.length; i++) {
+                String grade = (input[i]);
+                grades.add(grade);
+            }
+
+            nameGrades.put(firstName + " " + lastName,grades);
+        }
+        nameGrades.entrySet().stream()
+                .filter(kv -> {
+                    int count = 0;
+                    for (String grade : kv.getValue()) {
+                        if(grade.equals("2") || grade.equals("3")){
+                            count++;
+                        }
+                    }
+                    if(count > 1){
+                        return  true;
+                    }
+                    return  false;
+                })
+                .forEach(kv -> System.out.println(kv.getKey()));
+    }
+}
+
+.............................................................................................................................
+09. Students by Enrollment Year
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+        Map<String, List<String>> nameGrades = new LinkedHashMap<>();
+        while (true) {
+            String[] input = console.readLine().split("\\s+");
+            if ("END".equals(input[0])) {
+                break;
+            }
+
+            String enrolledYear = input[0];
+            List<String> grades = new ArrayList<>(Arrays.asList(input).subList(1, input.length));
+
+            nameGrades.put(enrolledYear,grades);
+        }
+        nameGrades.entrySet().stream()
+                .filter(kv -> kv.getKey().endsWith("14") || kv.getKey().endsWith("15"))
+                .forEach(kv -> System.out.println(String.join(" ",kv.getValue())));
+    }
+}
+
+..............................................................................................................................
+10.	* Group by Group 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+        List<Student> students = new ArrayList<>();
+
+        while (true) {
+            String[] input = console.readLine().split("\\s+");
+            if ("END".equals(input[0])) {
+                break;
+            }
+
+            String name = input[0] + " " + input[1];
+            int group = Integer.parseInt(input[2]);
+            Student student = new Student(name,group);
+            students.add(student);
+        }
+
+        Map<Integer, List<Student>> people = students.stream()
+                .collect(Collectors.groupingBy(Student::getGroup));
+
+        people.forEach((key, value) -> System.out.println(String.format("%d - %s", key, String.join(", ", value.stream()
+                .map(Student::getName)
+                .collect(Collectors.toList())))));
+
+    }
+}
+
+class Student {
+    private String name;
+    private Integer group;
+
+    Student(String name, Integer group) {
+        this.name = name;
+        this.group = group;
+    }
+
+    String getName() {
+        return name;
+    }
+
+    Integer getGroup() {
+        return group;
+    }
+}
+
+..............................................................................................................................
+11.	* Students Joined to Specialties 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeSet;
+
+public class Task01 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+        List<StudentSpecialty> specialties = new ArrayList<>();
+        List<Student> students = new ArrayList<>();
+
+
+        while (true) {
+            String[] input = console.readLine().split("\\s+");
+            if ("Students:".equals(input[0])) {
+                break;
+            }
+
+            String specName = input[0] + " " + input[1];
+            String fakNum = input[2];
+            StudentSpecialty speciality = new StudentSpecialty(specName, fakNum);
+            specialties.add(speciality);
+        }
+
+        while (true) {
+            String[] input = console.readLine().split("\\s+");
+            if ("END".equals(input[0])) {
+                break;
+            }
+            String name = input[1] + " " + input[2];
+            String fakNum = input[0];
+
+            Student student = new Student(name, fakNum);
+            students.add(student);
+        }
+
+        TreeSet<String> result = new TreeSet<>();
+        specialties.forEach(spec -> students.forEach(stu -> {
+            if (stu.getGroup().equals(spec.getFalcultyNumber())) {
+                String match = String.format("%s %s %s", stu.getName(), stu.getGroup(), spec.getSpecialyName());
+                result.add(match);
+            }
+        }));
+
+        result.forEach(System.out::println);
+    }
+}
+
+class StudentSpecialty {
+    private String specialyName;
+    private String falcultyNumber;
+
+    StudentSpecialty(String specialyName, String falcultyNumber) {
+        this.specialyName = specialyName;
+        this.falcultyNumber = falcultyNumber;
+    }
+
+    public String getSpecialyName() {
+        return specialyName;
+    }
+
+    public String getFalcultyNumber() {
+        return falcultyNumber;
+    }
+}
+
+
+class Student {
+    private String name;
+    private String group;
+
+    Student(String name, String group) {
+        this.name = name;
+        this.group = group;
+    }
+
+    String getName() {
+        return name;
+    }
+
+    String getGroup() {
+        return group;
+    }
+}
+
+..............................................................................................................................
+13.	* Office Stuff
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class OfficeCompany {
+    public static void main(String[] args) throws IOException {
+        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
+        TreeMap<String, LinkedHashMap<String, Integer>> company = new TreeMap<>();
+
+        int n = Integer.parseInt(console.readLine());
+        for (int i = 0; i < n; i++) {
+            List<String> input = Arrays.stream(console.readLine().split("[|\\s+-]+")).collect(Collectors.toList());
+            input.removeAll(Arrays.asList("", null));
+            String companyName = input.get(0);
+            Integer amount = Integer.parseInt(input.get(1));
+            String product = input.get(2);
+
+            if (!company.containsKey(companyName)) {
+                LinkedHashMap<String, Integer> temp = new LinkedHashMap<>();
+                temp.put(product, amount);
+                company.put(companyName, temp);
+            } else {
+                if (!company.get(companyName).containsKey(product)) {
+                    company.get(companyName).put(product, amount);
+                } else {
+                    LinkedHashMap<String, Integer> temp = company.get(companyName);
+                    temp.put(product, temp.get(product) + amount);
+                    company.put(companyName, temp);
+                }
+            }
+        }
+
+        TreeMap<String, List<String>> result = new TreeMap<>();
+        company.entrySet().stream()
+                .forEach(kv -> {
+                    String key = kv.getKey();
+                    List<String> temp = new ArrayList<>();
+                    for (Map.Entry<String, Integer> stringIntegerEntry : kv.getValue().entrySet()) {
+                        temp.add(stringIntegerEntry.getKey() + "-" + stringIntegerEntry.getValue());
+                    }
+                    result.put(key, temp);
+                });
+
+        result.entrySet().forEach(kv -> System.out.println(
+                String.format("%s: %s",kv.getKey(),String.join(", ",kv.getValue()))));
+
+    }
+}

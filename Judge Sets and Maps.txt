@@ -1,0 +1,583 @@
+1.	Unique Usernames
+import java.util.LinkedHashSet;
+import java.util.Scanner;
+import java.util.Set;
+
+public class Task01 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int n = Integer.parseInt(scanner.nextLine());
+        Set<String> names = new LinkedHashSet();
+
+        for (int i = 0; i < n; i++) {
+            String name = scanner.nextLine();
+            names.add(name);
+        }
+        for (String name : names) {
+            System.out.println(name);
+        }
+    }
+}
+
+2.	Sets of Elements 
+import java.util.*;
+
+public class Task01 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int[] input = Arrays.stream(scanner.nextLine().split("\\s+"))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+
+        int first = input[0];
+        int second = input[1];
+
+        Set<String> firstSet = new LinkedHashSet<>();
+        Set<String> secondSet = new LinkedHashSet<>();
+
+        fillSet(scanner, first, firstSet);
+        fillSet(scanner, second, secondSet);
+
+        StringBuilder result = new StringBuilder();
+        for (String s : firstSet) {
+            if(secondSet.contains(s)){
+                result.append(s).append(" ");
+            }
+        }
+
+        System.out.println(result.toString().trim());
+    }
+
+    private static void fillSet(Scanner scanner, int first, Set<String> firstSet) {
+        for (int i = 0; i < first; i++) {
+            String nums = scanner.nextLine();
+            firstSet.add(nums);
+        }
+    }
+}
+
+3.	Periodic Table 
+import java.util.*;
+
+public class Task01 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int n = Integer.parseInt(scanner.nextLine());
+        Set<String> result = new TreeSet<>();
+
+        for (int i = 0; i < n; i++) {
+            String[] chemical = scanner.nextLine().split("\\s+");
+            for (int j = 0; j < chemical.length; j++) {
+                result.add(chemical[j]);
+            }
+        }
+        for (String s : result) {
+            System.out.print(s + " ");
+        }
+    }
+}
+
+4.	Count Symbols 
+import java.util.*;
+
+public class Task01 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+        Map<Character,Integer> map = new TreeMap<>();
+
+        for (int i = 0; i < input.length(); i++) {
+            if(!map.containsKey(input.charAt(i))){
+                map.put(input.charAt(i),1);
+            }
+            else {
+                map.put(input.charAt(i), map.get(input.charAt(i)) + 1);
+            }
+        }
+        for (Map.Entry<Character, Integer> characterIntegerEntry : map.entrySet()) {
+            System.out.printf("%s: %d time/s%n" ,characterIntegerEntry.getKey(), characterIntegerEntry.getValue() );
+        }
+    }
+}
+
+5.	Phonebook 
+import java.util.*;
+
+public class Task01 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Map<String,String> map = new HashMap<>();
+
+        fillMap(scanner, map);
+        printContact(scanner, map);
+    }
+
+    private static void printContact(Scanner scanner, Map<String, String> map) {
+        while (true){
+            String showContact = scanner.nextLine();
+            if("stop".equals(showContact)){
+                break;
+            }
+            if(map.containsKey(showContact)){
+                System.out.printf("%s -> %s",showContact,map.get(showContact));
+                System.out.println();
+            }
+            else {
+                System.out.printf("Contact %s does not exist.",showContact);
+                System.out.println();
+            }
+        }
+    }
+
+    private static void fillMap(Scanner scanner, Map<String, String> map) {
+        while (true){
+
+            String[] inputContacts = scanner.nextLine().split("-");
+            if("search".equals(inputContacts[0])){
+                break;
+            }
+            String name = inputContacts[0];
+            String number = inputContacts[1];
+             if(!map.containsKey(name)){
+                 map.put(name,number);
+             }
+             else {
+                 map.put(name,number);
+             }
+        }
+    }
+}
+
+6.	A Miner Task
+import java.util.*;
+
+public class Task01 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Map<String,Integer> map = new LinkedHashMap<>();
+
+        while (true){
+            String resource = scanner.nextLine();
+            if("stop".equals(resource)){
+                break;
+            }
+            Integer quantity = Integer.parseInt(scanner.nextLine());
+
+            if(!map.containsKey(resource)){
+                map.put(resource,quantity);
+            }
+            else {
+                map.put(resource, map.get(resource) + quantity);
+            }
+        }
+
+        for (Map.Entry<String, Integer> stringIntegerEntry : map.entrySet()) {
+            System.out.printf("%s -> %d",stringIntegerEntry.getKey() ,stringIntegerEntry.getValue());
+            System.out.println("");
+        }
+    }
+}
+
+7.	Fix Emails 
+import java.util.*;
+import java.util.regex.Pattern;
+
+public class Task01 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Map<String,String> map = new LinkedHashMap<>();
+        String pattern = ".+@.+\\.(?!uk|com|us).+";
+       while (true){
+           String name = scanner.nextLine();
+           if("stop".equals(name)){
+               break;
+           }
+           String mail = scanner.nextLine();
+
+           if(Pattern.matches(pattern,mail)){
+               map.put(name,mail);
+           }
+       }
+
+        for (Map.Entry<String, String> stringStringEntry : map.entrySet()) {
+            System.out.println(stringStringEntry.getKey() + " -> " + stringStringEntry.getValue());
+        }
+    }
+}
+
+8.	Hands of cards
+import java.util.*;
+
+public class Task01 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Map<String,LinkedHashSet<String>> playerCards = new LinkedHashMap<>();
+        Map<String,Integer> playerPower = new LinkedHashMap<>();
+
+        fillPlayerDeck(scanner, playerCards);
+
+        for (Map.Entry<String, LinkedHashSet<String>> stringLinkedHashSetEntry : playerCards.entrySet()) {
+            String name = stringLinkedHashSetEntry.getKey();
+            LinkedHashSet<String> deck = new LinkedHashSet<>(stringLinkedHashSetEntry.getValue());
+            int result = 0;
+            for (String str : deck) {
+                char[] array = str.toCharArray();
+                 int num = getNum(array[0]);
+                int multiply = 0;
+                    if(array.length > 2){
+                        multiply = getMultiply(multiply, array, 2);
+                    }
+                    else {
+                        multiply = getMultiply(multiply, array, 1);
+                    }
+                result += num * multiply;
+            }
+            playerPower.put(name,result);
+        }
+
+        for (Map.Entry<String, Integer> stringIntegerEntry : playerPower.entrySet()) {
+            System.out.println(stringIntegerEntry.getKey() + ": " + stringIntegerEntry.getValue());
+        }
+    }
+
+    private static int getNum(char c) {
+        int num;
+        switch (c) {
+            case '1':
+                num = 10;
+                break;
+            case 'J':
+                num = 11;
+                break;
+            case 'Q':
+                num = 12;
+                break;
+            case 'K':
+                num = 13;
+                break;
+            case 'A':
+                num = 14;
+                break;
+            default:
+                num = Integer.parseInt(String.valueOf(c));
+                break;
+        }
+        return num;
+    }
+
+    private static int getMultiply(int multiply, char[] array, int i) {
+        switch (array[i]) {
+            case 'C':
+                multiply = 1;
+                break;
+            case 'D':
+                multiply = 2;
+                break;
+            case 'H':
+                multiply = 3;
+                break;
+            case 'S':
+                multiply = 4;
+                break;
+        }
+        return multiply;
+    }
+
+    private static void fillPlayerDeck(Scanner scanner, Map<String, LinkedHashSet<String>> playerCards) {
+        while (true){
+            String[] input = scanner.nextLine().split(": ");
+            if("JOKER".equals(input[0])){
+                break;
+            }
+
+            String playerName =input[0];
+            String[] cardsArr = input[1].split(", ");
+            LinkedHashSet<String> cards = new LinkedHashSet<>(Arrays.asList(cardsArr));
+
+            if(!playerCards.containsKey(playerName)){
+                playerCards.put(playerName,cards);
+            }
+            else {
+               playerCards.get(playerName).addAll(Arrays.asList(cardsArr));
+            }
+        }
+    }
+}
+
+9.	* User Logs
+import java.util.*;
+
+public class MarianAdministrator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        TreeMap<String,LinkedHashMap<String,Integer>> hackers = new TreeMap<>();
+
+        while (true){
+            String[] input = scanner.nextLine().split("\\s+");
+            if("end".equals(input[0])){
+                break;
+            }
+
+            String[] inputIPs = input[0].split("=");
+            String[] inputNames = input[2].split("=");
+            String IP = inputIPs[1];
+            String nameHacker = inputNames[1];
+
+            fillMapHackers(hackers, IP, nameHacker);
+
+        }
+
+        printResult(hackers);
+    }
+
+    private static void printResult(TreeMap<String, LinkedHashMap<String, Integer>> hackers) {
+        for (Map.Entry<String, LinkedHashMap<String, Integer>> stringLinkedHashMapEntry : hackers.entrySet()) {
+            String nameHacker = stringLinkedHashMapEntry.getKey();
+            System.out.println("");
+            System.out.println(nameHacker + ":");
+            int counter = 0;
+
+           LinkedHashMap<String,Integer> temp = new LinkedHashMap<>(stringLinkedHashMapEntry.getValue());
+            for (Map.Entry<String, Integer> stringIntegerEntry : temp.entrySet()) {
+                counter++;
+                if(counter == temp.size()){
+                    System.out.printf("%s => %d.", stringIntegerEntry.getKey(),stringIntegerEntry.getValue());
+                }
+                else {
+                    System.out.printf("%s => %d, ", stringIntegerEntry.getKey(),stringIntegerEntry.getValue());
+                }
+            }
+        }
+    }
+
+    private static void fillMapHackers(TreeMap<String, LinkedHashMap<String, Integer>> hackers, String IP, String nameHacker) {
+        if(!hackers.containsKey(nameHacker)){
+            LinkedHashMap<String,Integer> tempMap = new LinkedHashMap<>();
+            tempMap.put(IP,1);
+            hackers.put(nameHacker,tempMap);
+        }
+        else {
+            if(!hackers.get(nameHacker).containsKey(IP)){
+                hackers.get(nameHacker).put(IP,1);
+            }
+            else {
+                for (Map.Entry<String, Integer> stringIntegerEntry : hackers.get(nameHacker).entrySet()) {
+                    if(stringIntegerEntry.getKey().equals(IP)){
+                        hackers.get(nameHacker).put(IP , hackers.get(nameHacker).get(IP) + 1);
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+10.	* Population Counter
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class PopulationCounter {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        Map<String, LinkedHashMap<String,Long>> countries = new LinkedHashMap<>();
+
+        fillMap(scanner, countries);
+        Map<String, LinkedHashMap<String,Long>> sourtedMap = getSorted(countries);
+
+        for (Map.Entry<String, LinkedHashMap<String, Long>> stringLinkedHashMapEntry : sourtedMap.entrySet()) {
+            StringBuilder name = new StringBuilder();
+            long totalPopulation = 0;
+            LinkedHashMap<String,Long> sortedCities = stringLinkedHashMapEntry
+                    .getValue()
+                    .entrySet()
+                    .stream()
+                    .sorted((a,b) -> Long.compare(b.getValue(),a.getValue()))
+                    .collect(Collectors.toMap(Map.Entry::getKey ,Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
+            for (Map.Entry<String, Long> stringLongEntry : sortedCities.entrySet()) {
+                name.append("=>").append(stringLongEntry.getKey()).append(": ").append(stringLongEntry.getValue()).append("\n");
+                totalPopulation += stringLongEntry.getValue();
+            }
+            System.out.printf("%s (total population: %d)%n",stringLinkedHashMapEntry.getKey(),totalPopulation);
+            System.out.print(name);
+        }
+
+    }
+
+    private static LinkedHashMap<String, LinkedHashMap<String, Long>> getSorted(Map<String, LinkedHashMap<String, Long>> countries) {
+        return countries.entrySet()
+                .stream()
+                .sorted((country1, country2) -> {
+            long populationCountry1 = country1.getValue()
+                    .values()
+                    .stream()
+                    .mapToLong(Long::valueOf)
+                    .sum();
+            long populationCountry2 = country2.getValue()
+                    .values()
+                    .stream()
+                    .mapToLong(Long::valueOf)
+                    .sum();
+
+                    return Long.compare(populationCountry2, populationCountry1);
+        }).collect(Collectors.toMap(Map.Entry::getKey ,Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
+    }
+
+    private static void fillMap(Scanner scanner, Map<String, LinkedHashMap<String, Long>> countries) {
+        while (true){
+            String[] input = scanner.nextLine().split("\\|");
+            if("report".equals(input[0])){
+                break;
+            }
+            String countryName = input[1];
+            String cityName = input[0];
+            long cityPopulation = Long.parseLong(input[2]);
+            LinkedHashMap<String,Long> temp = new LinkedHashMap<>();
+            temp.put(cityName,cityPopulation);
+
+            if(!countries.containsKey(countryName)){
+                countries.put(countryName,temp);
+            }
+            else {
+                countries.get(countryName).put(cityName,cityPopulation);
+            }
+        }
+    }
+}
+
+11.	* Logs Aggregator 
+import java.util.*;
+
+public class LoggsAggregator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int n = Integer.parseInt(scanner.nextLine());
+
+        Map<String,TreeMap<String,Integer>> users = new TreeMap<>();
+        for (int i = 0; i < n; i++) {
+            String[] input = scanner.nextLine().split("\\s+");
+            String name = input[1];
+            String IP = input[0];
+            int time = Integer.parseInt(input[2]);
+
+            fillMap(users, name, IP, time);
+        }
+
+        printMap(users);
+    }
+
+    private static void printMap(Map<String, TreeMap<String, Integer>> users) {
+        for (Map.Entry<String, TreeMap<String, Integer>> stringTreeMapEntry : users.entrySet()) {
+            StringBuilder ips = new StringBuilder();
+            int totalTime = 0;
+            for (Map.Entry<String, Integer> stringIntegerEntry : stringTreeMapEntry.getValue().entrySet()) {
+                ips.append(stringIntegerEntry.getKey()).append(", ");
+                totalTime += stringIntegerEntry.getValue();
+            }
+            String ipcount = ips.substring(0,ips.length() - 2);
+            System.out.printf("%s: %d [%s]",stringTreeMapEntry.getKey(),totalTime, ipcount);
+            System.out.println();
+        }
+    }
+
+    private static void fillMap(Map<String, TreeMap<String, Integer>> users, String name, String IP, int time) {
+        if(!users.containsKey(name)){
+            TreeMap<String,Integer> temp = new TreeMap<>();
+            temp.put(IP,time);
+            users.put(name,temp);
+        }
+        else {
+            if(!users.get(name).containsKey(IP)){
+                users.get(name).put(IP,time);
+            }
+            else {
+                users.get(name).put(IP, users.get(name).get(IP) + time);
+            }
+        }
+    }
+}
+
+12.	* Legendary Farming 
+import java.util.*;
+
+import static java.util.stream.Collectors.toMap;
+
+public class LegendaryFarming {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        Map<String,Integer> mainItems = new TreeMap<>();
+        mainItems.put("fragments",0);
+        mainItems.put("shards",0);
+        mainItems.put("motes",0);
+        Map<String,Integer> junkItems = new TreeMap<>();
+
+        for (int i = 0; i < 10; i++) {
+            String[] input = scanner.nextLine().split("\\s+");
+
+            boolean isReady = false;
+            for (int j = 0; j < input.length ; j = j + 2) {
+
+                String material = (input[j + 1]).toLowerCase();
+                int quantity = Integer.parseInt(input[j]);
+                if(material.equals("fragments") || material.equals("shards") || material.equals("motes") ){
+                    fillMap(mainItems, material, quantity);
+                }
+                else {
+                    fillMap(junkItems,material,quantity);
+                }
+
+                if(mainItems.get("fragments") >= 250){
+                    System.out.println("Valanyr obtained!");
+                    mainItems.put("fragments",mainItems.get("fragments") - 250);
+                    isReady = true;
+                    break;
+                }
+                else  if (mainItems.get("shards") >= 250){
+                    System.out.println("Shadowmourne obtained!");
+                    mainItems.put("shards",mainItems.get("shards") - 250);
+                    isReady = true;
+                    break;
+                }
+                else  if (mainItems.get("motes") >= 250){
+                    System.out.println("Dragonwrath obtained!");
+                    mainItems.put("motes",mainItems.get("motes") - 250);
+                    isReady = true;
+                    break;
+                }
+
+            }
+            if(isReady){
+                break;
+            }
+        }
+
+        HashMap<String,Integer> sortedMainItems = mainItems
+                .entrySet()
+                .stream()
+                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                .collect( toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2,
+                        LinkedHashMap::new));
+
+        for (Map.Entry<String, Integer> stringIntegerEntry : sortedMainItems.entrySet()) {
+            System.out.println(stringIntegerEntry.getKey() + ": " + stringIntegerEntry.getValue());
+        }
+        for (Map.Entry<String, Integer> stringIntegerEntry : junkItems.entrySet()) {
+            System.out.println(stringIntegerEntry.getKey() + ": " + stringIntegerEntry.getValue());
+        }
+    }
+
+    private static void fillMap(Map<String, Integer> mainItems, String material, int quantity) {
+        if(!mainItems.containsKey(material)){
+            mainItems.put(material,quantity);
+        }
+        else {
+            mainItems.put(material, mainItems.get(material) + quantity);
+        }
+    }
+}
